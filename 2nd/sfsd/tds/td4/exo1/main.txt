@@ -1,0 +1,35 @@
+CONST G_FILENAME = 'test'
+CONST G_KEY = 'key'
+
+TYPE Record = RECORD {
+    key: STRING
+    // other fields
+}
+
+FUNCTION findRecordInFile(filename: STRING, key: STRING) Record
+    DECLARE 
+        file: FILE OF Record BUFFER(buf) HEADER(bnum) // bnum: stands for number of blocks
+        i: INTEGER
+    BEGIN
+        file = OPEN(filename, 'A')
+        FOR i = 0, i < bnum DO
+            BEGIN
+                buf = READ_BLOCK(file, i)
+                FOR record IN buf DO
+                    BEGIN
+                        IF record.key != key THEN CONTINUE
+                        CLOSE file
+                        RETURN record 
+                    END   
+            END
+        CLOSE file
+        RETURN NULL
+    END
+
+FUNCTION main() 
+    DECLARE record: Record
+    BEGIN
+        record = findRecordInFile(G_FILENAME, G_KEY)
+        IF record == NULL THEN PRINT('NOT FOUND')
+        ELSE PRINT(record)
+    END
