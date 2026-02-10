@@ -20,17 +20,26 @@ class Calculator {
 }
 
 class Parser {
-    public static double parseDoubleOrThrowAndExit(String key, String s) {
+    public static double parseDoubleOrFail(String key, String s) {
         try {
             return Double.parseDouble(s);
         } catch(NumberFormatException err) {
-            System.err.println("Expected %s to be a doube but get `%s`".formatted(key, s));
+            System.err.println("Expected %s to be a double but get `%s`".formatted(key, s));
+            System.exit(1);
+            return 0;
+        }
+    }
+
+    public static int parseIntOrFail(String key, String s) {
+        try {
+            return Integer.parseInt(s);
+        } catch(NumberFormatException err) {
+            System.err.println("Expected %s to be an integer but get `%s`".formatted(key, s));
             System.exit(1);
             return 0;
         }
     }
 }
-
 
 public class Main {
     public static void main(String[] args) {
@@ -39,9 +48,9 @@ public class Main {
             System.exit(1);
         }
 
-        double quiz = Parser.parseDoubleOrThrowAndExit("quiz", args[0]);
-        double midterm = Parser.parseDoubleOrThrowAndExit("midterm", args[1]);
-        double _final = Parser.parseDoubleOrThrowAndExit("final", args[2]);
+        double quiz = Parser.parseDoubleOrFail("quiz", args[0]);
+        double midterm = Parser.parseDoubleOrFail("midterm", args[1]);
+        double _final = Parser.parseDoubleOrFail("final", args[2]);
 
         Calculator.CalculationResult result = Calculator.calculate(quiz, midterm, _final);
         System.out.println("Average: %.2f\nStatus: %s\nMerit: %s\n".formatted(result.avg(), result.status(), result.merit()));
