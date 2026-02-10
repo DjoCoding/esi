@@ -64,6 +64,8 @@ public class Main {
             data.add(v);
         }
 
+        scanner.close();
+
         if(data.size() == 0) {
             System.out.println("No data");
             System.exit(0);
