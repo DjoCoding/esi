@@ -1,22 +1,37 @@
+record Location(int row, int col) {
+}
+
 class Solution {
-    public static int sumDigits(int n) {
-        if (n < 0)
-            throw new UnsupportedOperationException();
-        if (n == 0)
-            return 0;
-        return n % 10 + Solution.sumDigits((n / 10));
+
+    private static Integer findLocationInRow(boolean[] row, int cols, int k) {
+        for (int col = 0; col < cols - k; ++col) {
+            boolean found = true;
+
+            for (int j = 0; j < k; ++j) {
+                if (row[col + j]) {
+                    found = false;
+                    break;
+                }
+            }
+
+            if (found)
+                return col;
+        }
+
+        return null;
     }
 
-    private static int reverseNumber(int n, int reversed) {
-        if (n == 0)
-            return reversed;
-        return Solution.reverseNumber(n / 10, reversed * 10 + n % 10);
-    }
+    public static Location findLocation(boolean[][] seats, int rows, int cols, int k) {
+        if (k > cols)
+            return null;
 
-    public static int reverseNumber(int n) {
-        if (n < 0)
-            throw new UnsupportedOperationException();
-        return Solution.reverseNumber(n, 0);
+        for (int row = 0; row < rows; ++row) {
+            Integer col = Solution.findLocationInRow(seats[row], cols, k);
+            if (col != null)
+                return new Location(row, col);
+        }
+
+        return null;
     }
 }
 
